@@ -32,7 +32,6 @@ div.stButton > button:hover { box-shadow: 0 10px 25px rgba(255,110,196,0.7) !imp
 .surprise-content h1 { font-size: 3.8rem; color: #e91e63; margin-bottom: 0.5rem; animation: pulse 2s infinite; }
 .surprise-content p { font-size: 1.4rem; margin-bottom: 1.5rem; color: #333; animation: pulse 2.5s infinite; }
 
-/* Container for teddies + AG logo */
 .teddy-ag-container {
     display: flex;
     justify-content: center;
@@ -45,7 +44,6 @@ div.stButton > button:hover { box-shadow: 0 10px 25px rgba(255,110,196,0.7) !imp
 .teddy-img { width: 150px; height: 150px; object-fit: contain; animation: pulse 2s infinite; }
 .ag-logo { width: 160px; height: 160px; object-fit: cover; border-radius: 20px; animation: pulse 1.5s infinite; }
 
-/* Centered Valentine GIF */
 .valentine-gif-container {
     text-align: center;
     margin: 20px 0;
@@ -57,7 +55,6 @@ div.stButton > button:hover { box-shadow: 0 10px 25px rgba(255,110,196,0.7) !imp
     border-radius: 10px;
 }
 
-/* Keyframes */
 @keyframes pulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.1); }
@@ -66,9 +63,17 @@ div.stButton > button:hover { box-shadow: 0 10px 25px rgba(255,110,196,0.7) !imp
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-10px); }
 }
-.surprise-content p {
-    color: #FF7449; /* yellow-orange color */
-    font-size: 1.3rem;
+
+/* Animated hands emoji */
+.animated-hands {
+    font-size: 5rem;
+    animation: wave 1s infinite;
+}
+@keyframes wave {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(20deg); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(-20deg); }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -80,8 +85,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="subheading">Click below to open  surprise!</div>', unsafe_allow_html=True)
-
 # --- Session state ---
 if "clicked" not in st.session_state:
     st.session_state.clicked = False
@@ -91,13 +94,51 @@ def reveal():
 
 # --- Button ---
 if not st.session_state.clicked:
+    st.markdown('<div class="subheading">Click below to open surprise!</div>', unsafe_allow_html=True)
     st.markdown('<div style="display:flex; justify-content:center;">', unsafe_allow_html=True)
     if st.button("🎁 Open Your Surprise", on_click=reveal):
         pass
     st.markdown('</div>', unsafe_allow_html=True)
 
-# --- Surprise content ---
+# --- Surprise content / Animated hands ---
 if st.session_state.clicked:
+    # Replace message with animated hands first
+    st.markdown('<div style="text-align:center;" class="animated-hands">👐</div>', unsafe_allow_html=True)
+
+    # Load local images
+    left_teddy = Image.open("teddy.png")
+    right_teddy = Image.open("teddy.png")
+    ag_logo = Image.open("vale.png")
+    valentine_gif = Image.open("AG.png")  # Can be GIF
+
+    # Convert images to base64
+    def image_to_b64(img, fmt="PNG"):
+        buffered = BytesIO()
+        img.save(buffered, format=fmt)
+        return base64.b64encode(buffered.getvalue()).decode()
+
+    l_teddy_b64 = image_to_b64(left_teddy)
+    r_teddy_b64 = image_to_b64(right_teddy)
+    ag_logo_b64 = image_to_b64(ag_logo)
+    gif_b64 = image_to_b64(valentine_gif, fmt="GIF")
+
+    # Display Valentine GIF
+    st.markdown(f"""
+    <div class="valentine-gif-container">
+        <img src="data:image/gif;base64,{gif_b64}" class="valentine-gif"/>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Display teddies + AG logo
+    st.markdown(f"""
+    <div class="teddy-ag-container">
+        <img src="data:image/png;base64,{l_teddy_b64}" class="teddy-img"/>
+        <img src="data:image/png;base64,{ag_logo_b64}" class="ag-logo"/>
+        <img src="data:image/png;base64,{r_teddy_b64}" class="teddy-img"/>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Final Valentine message
     st.markdown("""
     <div class="surprise-content">
         <h1>Happy Valentine’s Day! 💕</h1>
@@ -105,47 +146,3 @@ if st.session_state.clicked:
     </div>
     """, unsafe_allow_html=True)
 
-    # Load local images
-    left_teddy = Image.open("teddy.png")    # Left teddy
-    right_teddy = Image.open("teddy.png")   # Right teddy
-    ag_logo = Image.open("vale.png")         # AG logo
-    valentine_gif = Image.open("AG.png")    # Local Valentine GIF
-
-    
-    
-    # Convert AG logo to base64
-    buffered = BytesIO()
-    ag_logo.save(buffered, format="PNG")
-    ag_logo_b64 = base64.b64encode(buffered.getvalue()).decode()
-
-    # Convert Valentine GIF to base64
-    buffered_gif = BytesIO()
-    valentine_gif.save(buffered_gif, format="GIF")
-    gif_b64 = base64.b64encode(buffered_gif.getvalue()).decode()
-
-    buffered = BytesIO()
-    right_teddy.save(buffered, format="PNG")
-    r_teddy_b64 = base64.b64encode(buffered.getvalue()).decode()
-    
-    buffered = BytesIO()
-    left_teddy.save(buffered, format="PNG")
-    l_teddy_b64 = base64.b64encode(buffered.getvalue()).decode()
-    
-    # Display Valentine GIF below
-    st.markdown(f"""
-    <div class="valentine-gif-container">
-        <img src="data:image/gif;base64,{gif_b64}" class="valentine-gif"/>
-    </div>
-    """, unsafe_allow_html=True)
-
-    
-    # Display teddies + AG logo
-    st.markdown(f"""
-    <div class="teddy-ag-container">
-        <img src="data:image/png;base64, {l_teddy_b64}" class="teddy-img"/>
-        <img src="data:image/png;base64,{ag_logo_b64}" class="ag-logo"/>
-        <img src="data:image/png;base64, {r_teddy_b64}" class="teddy-img"/>
-    </div>
-    """, unsafe_allow_html=True)
-
-    
