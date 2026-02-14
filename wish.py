@@ -2,8 +2,6 @@ import streamlit as st
 from PIL import Image
 import base64
 from io import BytesIO
-from datetime import datetime
-import time
 
 st.set_page_config(page_title="Valentine Surprise 💖", layout="centered")
 
@@ -154,15 +152,4 @@ if st.session_state.clicked:
     """, unsafe_allow_html=True)
     
     
-    datetime_placeholder = st.empty()
-
-# --- Update live every second ---
-    while True:
-    	now = datetime.now().strftime("%A, %d %B %Y | %H:%M:%S")
-    	datetime_placeholder.markdown(f"""
-    	<div style="text-align:center; margin-top:50px; font-size:1rem; color:#309b9a;">
-    	    🕒 {now}
-    	</div>
-    	""", unsafe_allow_html=True)
-
-   
+    
