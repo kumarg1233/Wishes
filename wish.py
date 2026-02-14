@@ -2,6 +2,8 @@ import streamlit as st
 from PIL import Image
 import base64
 from io import BytesIO
+from datetime import datetime
+import time
 
 st.set_page_config(page_title="Valentine Surprise 💖", layout="centered")
 
@@ -31,6 +33,7 @@ div.stButton > button:hover { box-shadow: 0 10px 25px rgba(255,110,196,0.7) !imp
 .surprise-content { text-align: center; margin-top: 2rem; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 .surprise-content h1 { font-size: 3.8rem; color: #e91e63; margin-bottom: 0.5rem; animation: pulse 2s infinite; }
 .surprise-content p { font-size: 1.4rem; margin-bottom: 1.5rem; color: #333; animation: pulse 2.5s infinite; }
+.date p { font-size: 1.4rem; margin-bottom: 1.5rem; color: #333; animation: pulse 2.5s infinite; }
 
 .teddy-ag-container {
     display: flex;
@@ -75,12 +78,15 @@ div.stButton > button:hover { box-shadow: 0 10px 25px rgba(255,110,196,0.7) !imp
     50% { transform: rotate(0deg); }
     75% { transform: rotate(-20deg); }
 }
+
+.surprise-content p { color: #FF7449; /* yellow-orange color */ font-size: 1.3rem; }
+.date p { color: #FF7449; /* yellow-orange color */ font-size: 1.3rem; }
 </style>
 """, unsafe_allow_html=True)
 
 # --- Main heading ---
 st.markdown("""
-<div class="main-heading" style="color: #FF446E;">
+<div class="main-heading" style="color: #B20101;">
     <span>🌹</span> A Valentine’s Day Surprise <span>🌹</span>
 </div>
 """, unsafe_allow_html=True)
@@ -104,6 +110,15 @@ if not st.session_state.clicked:
 if st.session_state.clicked:
     # Replace message with animated hands first
     st.markdown('<div style="text-align:center;" class="animated-hands">👐</div>', unsafe_allow_html=True)
+
+# Final Valentine message
+    st.markdown("""
+    <div class="surprise-content">
+        <h1>Happy Valentine’s Day! 💕</h1>
+        <p>Wishing you love, laughter, and joy today and always!</p>
+    </div>
+    """, unsafe_allow_html=True)
+
 
     # Load local images
     left_teddy = Image.open("teddy.png")
@@ -137,12 +152,17 @@ if st.session_state.clicked:
         <img src="data:image/png;base64,{r_teddy_b64}" class="teddy-img"/>
     </div>
     """, unsafe_allow_html=True)
+    
+    
+    datetime_placeholder = st.empty()
 
-    # Final Valentine message
-    st.markdown("""
-    <div class="surprise-content">
-        <h1>Happy Valentine’s Day! 💕</h1>
-        <p>Wishing you love, laughter, and joy today and always!</p>
-    </div>
-    """, unsafe_allow_html=True)
+# --- Update live every second ---
+    while True:
+    	now = datetime.now().strftime("%A, %d %B %Y | %H:%M:%S")
+    	datetime_placeholder.markdown(f"""
+    	<div style="text-align:center; margin-top:50px; font-size:1rem; color:#309b9a;">
+    	    🕒 {now}
+    	</div>
+    	""", unsafe_allow_html=True)
 
+   
