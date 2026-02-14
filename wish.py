@@ -66,17 +66,21 @@ div.stButton > button:hover { box-shadow: 0 10px 25px rgba(255,110,196,0.7) !imp
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-10px); }
 }
+.surprise-content p {
+    color: #FF7449; /* yellow-orange color */
+    font-size: 1.3rem;
+}
 </style>
 """, unsafe_allow_html=True)
 
 # --- Main heading ---
 st.markdown("""
-<div class="main-heading">
+<div class="main-heading" style="color: #FF446E;">
     <span>🌹</span> A Valentine’s Day Surprise <span>🌹</span>
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="subheading">Click below to open your surprise!</div>', unsafe_allow_html=True)
+st.markdown('<div class="subheading">Click below to open  surprise!</div>', unsafe_allow_html=True)
 
 # --- Session state ---
 if "clicked" not in st.session_state:
@@ -105,7 +109,7 @@ if st.session_state.clicked:
     left_teddy = Image.open("teddy.png")    # Left teddy
     right_teddy = Image.open("teddy.png")   # Right teddy
     ag_logo = Image.open("vale.png")         # AG logo
-    valentine_gif = Image.open("AG")    # Local Valentine GIF
+    valentine_gif = Image.open("AG.png")    # Local Valentine GIF
 
     
     
